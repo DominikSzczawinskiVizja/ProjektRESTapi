@@ -1,0 +1,36 @@
+﻿@page
+@model razor.Pages.add_auctionModel
+@{
+
+}
+<h1>Wystaw</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Nazwa" class="form-label">Nazwa</label>
+        <input asp-for="Nazwa" class="form-control" />
+        <span asp-validation-for="Nazwa" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Cenawywoławcza" class="form-label">Cena wywoławcza</label>
+        <input asp-for="Cenawywoławcza" class="form-control" type="number" />
+    </div>
+   
+    <div class="mb-3">
+        <label asp-for="Kategoria" class="form-label">Kategoria</label>
+        <input asp-for="Kategoria" class="form-control" />
+        <span asp-validation-for="Kategoria" class="text-danger"></span>
+    </div>
+    <div>
+        <lable> Czas aukcji</lable>
+        <select asp-for="Czasaukcji" class="form-control">
+            <option value="12"> 12 godzin</option>
+            <option value="24"> 24 godzin</option>
+            <option value="48"> 48 godzin</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Stwórz aukcje</button>
+    <a asp-page="/Index" class="btn btn-secondary">Anuluj</a>
+</form>
