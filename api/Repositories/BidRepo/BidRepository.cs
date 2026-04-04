@@ -21,15 +21,17 @@ public class BidRepository : IBidRepository // Implementacja IBidRepository poka
     {
         return await _context.Bids.FindAsync(id); // Uzywa metody FindAsync() ktora szuka w bazie danych oferty o podanym id i zwraca ja, jesli znajdzie, lub null, jesli nie znajdzie.
     }
-    public async Task AddBidAsync(Bid bid) // Przyjmuje jako parametr obiekt Bid, ktory zawiera dane nowej oferty. Dodaje ten obiekt do bazy danych i zapisuje zmiany.
+    public async Task<Bid> AddBidAsync(Bid bid) // Przyjmuje jako parametr obiekt Bid, ktory zawiera dane nowej oferty. Dodaje ten obiekt do bazy danych i zapisuje zmiany.
     {
         await _context.Bids.AddAsync(bid); // Uzywa metody AddAsync() ktora dodaje nowy obiekt Bid do listy Bids w bazie danych.
         await _context.SaveChangesAsync(); // Zapisuje wszystkie zmiany w bazie danych.
+        return bid;
     }
-    public async Task UpdateBidAsync(Bid bid) // Przyjmuje Bid ktory zawiera w sobie zaktualizowane dane oferty.
+    public async Task<Bid> UpdateBidAsync(Bid bid) // Przyjmuje Bid ktory zawiera w sobie zaktualizowane dane oferty.
     {
         _context.Bids.Update(bid); // Aktualizuje te oferte w bazie danych
         await _context.SaveChangesAsync();// Zapisuje wszystkie zmiany w bazie danych.
+        return bid;
     }
     public async Task DeleteBidAsync(int id) // Przyjmuje id 
     {

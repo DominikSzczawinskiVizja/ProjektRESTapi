@@ -17,19 +17,21 @@ namespace api.Repositories.UserRepo
         {
             return await _context.Users.ToListAsync();
         }
-        public async Task<User?> GetUserAsync(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
         }
-        public async Task AddUserAsync(User user)
+        public async Task<User> AddUserAsync(User user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+            return user;
         }
-        public async Task UpdateUserAsync(User user)
+        public async Task<User> UpdateUserAsync(User user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+            return user;
         }
         public async Task DeleteUserAsync(int id)
         {

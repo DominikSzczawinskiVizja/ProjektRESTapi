@@ -21,15 +21,17 @@ namespace api.Repositories.AuctionRepo
         {
             return await _context.Auctions.FindAsync(id);
         }
-        public async Task AddAuctionAsync(Auction auction)
+        public async Task<Auction> AddAuctionAsync(Auction auction)
         {
             await _context.Auctions.AddAsync(auction);
             await _context.SaveChangesAsync();
+            return auction;
         }
-        public async Task UpdateAuctionAsync(Auction auction)
+        public async Task<Auction> UpdateAuctionAsync(Auction auction)
         {
             _context.Auctions.Update(auction);
             await _context.SaveChangesAsync();
+            return auction;
         }
         public async Task DeleteAuctionAsync(int id)
         {

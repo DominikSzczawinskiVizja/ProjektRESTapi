@@ -2,7 +2,9 @@
 {
     public class Auction
     {
-        public required long Id { get; set; }
+        public ICollection<Bid> Bids { get; set; } = [];
+
+        public long Id { get; set; }
 
         public required string Name { get; set; }
 
@@ -10,13 +12,17 @@
 
         public required string Category { get; set; }
 
-        public required int Price { get; set; }
+        public required decimal Price { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
+        public DateTime StartAt { get; set; }
+
         public DateTime EndAt { get; set; }
 
-        public required string OwnerName { get; set; }
+        public long OwnerId { get; set; }
+
+        public decimal CurrentPrice { get; set; }
 
     }
 }

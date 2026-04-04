@@ -3,13 +3,14 @@
     public class Bid
     {
 
-        public required long Id { get; set; }
+        public long Id { get; set; }
 
-        public required int Price { get; set; }
+        public required decimal Amount { get; set; }
 
-        public required string BidName { get; set; }
+        public long AuctionId { get; set; }
 
-        public required string WhichAuction { get; set; }
+        public long UserId { get; set; }
 
+        public DateTime CreatedAt { get; set; }
     }
 }
