@@ -17,7 +17,7 @@ namespace api.Repositories.UserRepo
         {
             return await _context.Users.ToListAsync();
         }
-        public async Task<User?> GetByIdAsync(int id)
+        public async Task<User?> GetByIdAsync(long id)
         {
             return await _context.Users.FindAsync(id);
         }
@@ -33,7 +33,7 @@ namespace api.Repositories.UserRepo
             await _context.SaveChangesAsync();
             return user;
         }
-        public async Task DeleteUserAsync(int id)
+        public async Task DeleteUserAsync(long id)
         {
             var User = await _context.Users.FindAsync(id);
             if(User == null)

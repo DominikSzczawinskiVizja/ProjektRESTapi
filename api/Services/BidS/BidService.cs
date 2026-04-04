@@ -19,7 +19,7 @@ namespace api.Services.BidS
         {
             return await _repository.GetAllAsync();
         }
-        public async Task<Bid?> GetByIdAsync(int id) //getById
+        public async Task<Bid?> GetByIdAsync(long id) //getById
         {
             return await _repository.GetByIdAsync(id);
         }
@@ -61,7 +61,7 @@ namespace api.Services.BidS
             await _auction.UpdateAuctionAsync(Auction);
             return await _repository.UpdateBidAsync(bid);
         }
-        public async Task DeleteBidAsync(int id) //delete
+        public async Task DeleteBidAsync(long id) //delete
             {
                 await _repository.DeleteBidAsync(id);
             }

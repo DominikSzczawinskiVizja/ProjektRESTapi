@@ -16,7 +16,7 @@ namespace api.Services.AuctionS
         {
             return await _repository.GetAllAsync();
         }
-        public async Task<Auction?> GetByIdAsync(int id)
+        public async Task<Auction?> GetByIdAsync(long id)
         {
             return await _repository.GetByIdAsync(id);
         }
@@ -28,7 +28,7 @@ namespace api.Services.AuctionS
         {
             return await _repository.UpdateAuctionAsync(auction);
         }
-        public async Task DeleteAuctionAsync(int id)
+        public async Task DeleteAuctionAsync(long id)
         {
             await _repository.DeleteAuctionAsync(id);
         }

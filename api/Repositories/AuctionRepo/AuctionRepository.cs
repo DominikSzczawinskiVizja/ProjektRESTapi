@@ -17,7 +17,7 @@ namespace api.Repositories.AuctionRepo
         {
             return await _context.Auctions.ToListAsync();
         }
-        public async Task<Auction?> GetByIdAsync(int id)
+        public async Task<Auction?> GetByIdAsync(long id)
         {
             return await _context.Auctions.FindAsync(id);
         }
@@ -33,7 +33,7 @@ namespace api.Repositories.AuctionRepo
             await _context.SaveChangesAsync();
             return auction;
         }
-        public async Task DeleteAuctionAsync(int id)
+        public async Task DeleteAuctionAsync(long id)
         {
             var Auction = await _context.Auctions.FindAsync(id);
             if(Auction == null)

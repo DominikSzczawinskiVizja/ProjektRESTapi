@@ -1,13 +1,14 @@
-﻿using api.Models;
+﻿using api.DTOs.UserDto;
+using api.Models;
 
 namespace api.Services.UserS
 {
     public interface IUserService
     {
         Task<IEnumerable<User>> GetAllAsync();
-        Task<User?> GetByIdAsync(int id);
-        Task<User> AddUserAsync(User user);
-        Task<User> UpdateUserAsync(User user);
-        Task DeleteUserAsync(int id);
+        Task<User?> GetByIdAsync(long id);
+        Task<User> AddUserAsync(UserCreateDto dto);
+        Task<User> UpdateUserAsync(long id, UserUpdateDto dto);
+        Task DeleteUserAsync(long id);
     }
 }

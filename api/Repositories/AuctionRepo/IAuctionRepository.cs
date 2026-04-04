@@ -6,12 +6,12 @@ namespace api.Repositories.AuctionRepo
     {
         Task<IEnumerable<Auction>> GetAllAsync();
 
-        Task<Auction?> GetByIdAsync(int id);
+        Task<Auction?> GetByIdAsync(long id);
 
         Task<Auction> AddAuctionAsync(Auction auction);
 
         Task<Auction> UpdateAuctionAsync(Auction auction);
 
-        Task DeleteAuctionAsync(int id);
+        Task DeleteAuctionAsync(long id);
     }
 }
