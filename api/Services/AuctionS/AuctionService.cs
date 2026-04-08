@@ -27,7 +27,8 @@ namespace api.Services.AuctionS
                 Description = dto.Description,
                 Category = dto.Category,
                 Price = dto.Price,
-                EndAt = dto.EndAt
+                EndAt = dto.EndAt,
+                CurrentPrice = dto.Price,
             };
             if (newAuction.EndAt < DateTime.UtcNow)
             {
@@ -54,7 +55,7 @@ namespace api.Services.AuctionS
             var auction = await _repository.GetByIdAsync(id);
             if(auction!.Bids.Count != 0)
             {
-                throw new InvalidCastException("Cannot delete Auction when bids already exist");
+                throw new InvalidOperationException("Cannot delete Auction when bids already exist");
             }
             await _repository.DeleteAuctionAsync(id);
         }

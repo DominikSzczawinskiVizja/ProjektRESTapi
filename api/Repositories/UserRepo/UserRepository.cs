@@ -16,7 +16,9 @@ namespace api.Repositories.UserRepo
         }
         public async Task<User?> GetByIdAsync(long id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users
+            .Include(u => u.Auctions)
+            .FirstOrDefaultAsync(u => u.Id == id);
         }
         public async Task<User> AddUserAsync(User user)
         {
