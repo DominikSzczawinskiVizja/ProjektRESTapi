@@ -1,4 +1,5 @@
-﻿using api.Models;
+﻿//Interfejs respozytorium który pokazuje dla repo jakie metody mają sie tam znależć ułatwia testowanie i implementacje
+using api.Models;
 
 namespace api.Repositories.BidRepo
 {

@@ -1,18 +1,15 @@
-﻿using api.Data;
+﻿//Głowne miejsce gdzie kod rozmawia z bazą danych
+using api.Data;
 using api.Models;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repositories.AuctionRepo
 {
-    public class AuctionRepository : IAuctionRepository
+    public class AuctionRepository(AppDbContext context) : IAuctionRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = context;
 
-        public AuctionRepository(AppDbContext context)
-        {
-            _context = context;
-        }
         public async Task<IEnumerable<Auction>> GetAllAsync()
         {
             return await _context.Auctions.ToListAsync();
@@ -35,16 +32,9 @@ namespace api.Repositories.AuctionRepo
         }
         public async Task DeleteAuctionAsync(long id)
         {
-            var Auction = await _context.Auctions.FindAsync(id);
-            if(Auction == null)
-            {
-                throw new KeyNotFoundException($"Aukcja o id: {id} nie istnieje.");
-            }
-            else
-            {
-                _context.Auctions.Remove(Auction);
-                await _context.SaveChangesAsync();
-            }
+            var auction = await _context.Auctions.FindAsync(id);
+            _context.Auctions.Remove(auction!);
+            await _context.SaveChangesAsync();
         }
     }
 }

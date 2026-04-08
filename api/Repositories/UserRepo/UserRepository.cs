@@ -1,18 +1,15 @@
-﻿using api.Data;
+﻿//Głowne miejsce gdzie kod rozmawia z bazą danych
+using api.Data;
 using api.Models;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repositories.UserRepo
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(AppDbContext context) : IUserRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = context;
 
-        public UserRepository(AppDbContext context)
-        {
-            _context = context;
-        }
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();
@@ -35,16 +32,9 @@ namespace api.Repositories.UserRepo
         }
         public async Task DeleteUserAsync(long id)
         {
-            var User = await _context.Users.FindAsync(id);
-            if(User == null)
-            {
-                throw new KeyNotFoundException($"Nie znaleziono uzytkownika o id: {id}");
-            }
-            else
-            {
-                _context.Users.Remove(User);
-                await _context.SaveChangesAsync();
-            }
+            var user = await _context.Users.FindAsync(id);
+            _context.Users.Remove(user!);
+            await _context.SaveChangesAsync();
         }
     }
 }

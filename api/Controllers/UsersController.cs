@@ -7,14 +7,11 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController(IUserService service) : ControllerBase
     {
         //dodanie serwisow do kontrolera w _service
-        private readonly IUserService _service;
-        public UsersController(IUserService service)
-        {
-            _service = service;
-        }
+        private readonly IUserService _service = service;
+
         //Pobieranie użytkownika po ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(long id)

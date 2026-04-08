@@ -1,7 +1,9 @@
-﻿namespace api.Models
+﻿//Struktura bazy danych każda klasa = tabelka w SQL
+namespace api.Models
 {
     public class User
     {
+        public ICollection<Auction> Auctions { get; set; } = [];
         public long Id { get; set; }
         public required string FirstName { get; set; }
         public string? MiddleName { get; set; }

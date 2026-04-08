@@ -1,16 +1,15 @@
-﻿using api.Models;
+﻿//Miejsce w którym program waliduje dane
+using api.Models;
 using api.DTOs.UserDto;
 using api.Repositories.UserRepo;
+using api.Repositories.AuctionRepo;
 
 namespace api.Services.UserS
 {
-    public class UserService : IUserService
+    public class UserService(IUserRepository repository, IAuctionRepository auction) : IUserService
     {
-        private readonly IUserRepository _repository;
-        public UserService(IUserRepository repository)
-        {
-            _repository = repository;
-        }
+        private readonly IUserRepository _repository = repository;
+        private readonly IAuctionRepository _auction = auction;
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
@@ -19,14 +18,10 @@ namespace api.Services.UserS
         public async Task<User?> GetByIdAsync(long id)
         {
             var user = await _repository.GetByIdAsync(id);
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"User with ID: {id} not found");
-            }
-            return user;
+            return user ?? throw new KeyNotFoundException($"User with ID: {id} not found");
         }
         public async Task<User> AddUserAsync(UserCreateDto dto)
-        {
+        {   //dane wysylane przez klienta
             var newUser = new User
             {
                 FirstName = dto.FirstName,
@@ -41,19 +36,19 @@ namespace api.Services.UserS
         public async Task<User> UpdateUserAsync(long id, UserUpdateDto dto)
         {
             var user = await _repository.GetByIdAsync(id);
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"User with ID: {id} not found");
-            }
-
-            user.FirstName = dto.FirstName ?? user.FirstName;
-            user.LastName = dto.LastName ?? user.LastName;
-            user.Email = dto.Email ?? user.Email;
+            user!.FirstName = dto.FirstName ?? user.FirstName;
+            user!.LastName = dto.LastName ?? user.LastName;
+            user!.Email = dto.Email ?? user.Email;
 
             return await _repository.UpdateUserAsync(user);
         }
         public async Task DeleteUserAsync(long id)
         {
+            var user = await GetByIdAsync(id);
+            if(user!.Auctions.Count != 0)
+            {
+                throw new InvalidOperationException("Cannot delete Account when auction is ongoing");
+            }
             await _repository.DeleteUserAsync(id);
         }
     }
