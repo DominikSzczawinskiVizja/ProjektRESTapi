@@ -11,5 +11,6 @@ namespace api.Models
         public required string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
         public required string Email { get; set; }
+        public string Role { get; set; } = "User";
     }
 }

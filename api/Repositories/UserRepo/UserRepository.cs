@@ -1,8 +1,8 @@
 ﻿//Głowne miejsce gdzie kod rozmawia z bazą danych
 using api.Data;
 using api.Models;
-
 using Microsoft.EntityFrameworkCore;
+
 
 namespace api.Repositories.UserRepo
 {
@@ -19,6 +19,11 @@ namespace api.Repositories.UserRepo
             return await _context.Users
             .Include(u => u.Auctions)
             .FirstOrDefaultAsync(u => u.Id == id);
+        }
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
         }
         public async Task<User> AddUserAsync(User user)
         {

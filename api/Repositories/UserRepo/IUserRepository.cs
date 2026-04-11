@@ -9,6 +9,8 @@ namespace api.Repositories.UserRepo
 
         Task<User?> GetByIdAsync(long id);
 
+        Task<User?> GetByEmailAsync(string email);
+
         Task<User> AddUserAsync(User user);
 
         Task<User> UpdateUserAsync(User user);
