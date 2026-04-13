@@ -2,6 +2,8 @@
 using api.DTOs.AuctionDto;
 using api.Services.AuctionS;
 using Microsoft.AspNetCore.Mvc;
+using api.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
@@ -19,10 +21,12 @@ namespace api.Controllers
             return Ok(auction);
         }
         //dodawanie aukcji
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddAuction([FromBody] AuctionCreateDto dto)
         {
-            var auction = await _service.AddAuctionAsync(dto);
+            var ownerId = User.GetUserId();
+            var auction = await _service.AddAuctionAsync(dto, ownerId);
             return CreatedAtAction(nameof(GetAuctionById), new { id = auction.Id }, auction);
         }
         [HttpPut("{id}")]

@@ -19,7 +19,7 @@ namespace api.Services.AuctionS
             var auction = await _repository.GetByIdAsync(id);
             return auction ?? throw new KeyNotFoundException($"Auction with ID: {id} not found");
         }
-        public async Task<Auction> AddAuctionAsync(AuctionCreateDto dto)
+        public async Task<Auction> AddAuctionAsync(AuctionCreateDto dto, long ownerId)
         {
             var newAuction = new Auction
             {
@@ -29,6 +29,8 @@ namespace api.Services.AuctionS
                 Price = dto.Price,
                 EndAt = dto.EndAt,
                 CurrentPrice = dto.Price,
+                OwnerId = ownerId,
+                CreatedAt = DateTime.UtcNow,
             };
             if (newAuction.EndAt < DateTime.UtcNow)
             {

@@ -13,9 +13,10 @@ using api.Services.BidS;
 using api.Services.UserS;
 //framework itp.
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +32,24 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBidRepository, BidRepository>();
 builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http, // Nazwa Headera
+        Scheme = "Bearer", //Schemat: Bearer (JWT)
+        BearerFormat = "JWT", //Format: JWT token
+        Description = "Paste ur JWT token here. {token}" //instrukcja dla usera
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+           
+            [new OpenApiSecuritySchemeReference("bearer", document)] = [],
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -49,7 +67,7 @@ builder.Services
         "Invalid JWT configuration. Provide Jwt:Issuer, Jwt:Audience, Jwt:Key (min 32 chars) and sensible Jwt:ExpiresMinutes.")
     .ValidateOnStart(); //fail fast dla aplikacji gdy cos jest nie tak przykladowo zapomnimy ustawić Jwt:Key
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) //AddAuthentication pokazuje domyslny schemat dla apki
-    .AddJwtBearer(options => //
+    .AddJwtBearer(options =>
     {
         var jwtIssuer = builder.Configuration["Jwt:Issuer"]; 
         var jwtAudience = builder.Configuration["Jwt:Audience"];

@@ -7,7 +7,7 @@ namespace api.Services.AuctionS
     {
         Task<IEnumerable<Auction>> GetAllAsync();
         Task<Auction?> GetByIdAsync(long id);
-        Task<Auction> AddAuctionAsync(AuctionCreateDto dto);
+        Task<Auction> AddAuctionAsync(AuctionCreateDto dto, long ownerId);
         Task<Auction> UpdateAuctionAsync(long id, AuctionUpdateDto dto);
         Task DeleteAuctionAsync(long id);
     }
