@@ -1,32 +1,509 @@
-html {
-  font-size: 14px;
+
+:root {
+    --orange: #E8500A;
+    --dark: #111111;
+    --mid: #1e1e1e;
+    --light-gray: #f4f2ee;
+    --muted: #888;
+    --border: #2a2a2a;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+* {
+    box-sizing: border-box;
 }
 
 body {
-    margin-bottom: 60px;
-    background: linear-gradient(0deg, gray, white);
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light-gray);
+    color: var(--dark);
+    margin: 0;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* pasek nawigacyjny*/
+nav {
+    background: var(--dark);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: #fff;
+    letter-spacing: 2px;
+    text-decoration: none;
+}
+
+    .nav-logo span {
+        color: var(--orange);
+    }
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .nav-links a {
+        color: #ccc;
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        transition: color 0.2s;
+    }
+
+        .nav-links a:hover {
+            color: var(--orange);
+        }
+
+.nav-btn {
+    background: var(--orange);
+    color: #fff !important;
+    padding: 0.4rem 1.2rem;
+    border-radius: 4px;
+}
+
+/* duży pasek na górze*/
+.hero {
+    background: var(--dark);
+    color: #fff;
+    padding: 80px 2rem 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .hero::before {
+        content: 'AUCTION';
+        position: absolute;
+        top: -20px;
+        right: -30px;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 18rem;
+        color: rgba(255,255,255,0.03);
+        line-height: 1;
+        pointer-events: none;
+    }
+
+.hero-tag {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 1.2rem;
+}
+
+.hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+    .hero h1 span {
+        color: var(--orange);
+    }
+
+.hero p {
+    color: #aaa;
+    max-width: 520px;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary-custom {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+}
+
+    .btn-primary-custom:hover {
+        opacity: 0.85;
+        color: #fff;
+    }
+
+.btn-outline-custom {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+}
+
+    .btn-outline-custom:hover {
+        border-color: #aaa;
+        color: #fff;
+    }
+
+/*losowe staty*/
+.stats-bar {
+    background: var(--orange);
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: #fff;
+    letter-spacing: 1px;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.75);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* kategorie*/
+.section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 0.4rem;
+}
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 1px;
+    line-height: 1.1;
+}
+
+/* aukcje */
+.auctions-section {
+    padding: 60px 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+}
+
+.filter-btn {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 0.4rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--dark);
+}
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--dark);
+        color: #fff;
+        border-color: var(--dark);
+    }
+
+.auction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.auction-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+    .auction-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    }
+
+.card-img-wrap {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #e8e8e8;
+    overflow: hidden;
+}
+
+    .card-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s;
+    }
+
+.auction-card:hover .card-img-wrap img {
+    transform: scale(1.05);
+}
+
+.card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--dark);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+}
+
+    .card-badge.live {
+        background: #e03434;
+        animation: pulse 1.5s infinite;
+    }
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.card-body-custom {
+    padding: 1.1rem 1.2rem 1.3rem;
+}
+
+.card-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+}
+
+.card-title-custom {
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    margin-bottom: 0.8rem;
+    color: var(--dark);
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 0.8rem;
+    margin-top: 0.8rem;
+}
+
+.bid-label {
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.bid-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--orange);
+    letter-spacing: 1px;
+}
+
+.time-left {
+    text-align: right;
+}
+
+.time-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.time-sub {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* tutorial mały, widziałem że stronki aukcyjne coś takiego dodają więc jest*/
+.how-section {
+    background: var(--dark);
+    color: #fff;
+    padding: 70px 2rem;
+}
+
+.how-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.step {
+    position: relative;
+    padding-left: 1rem;
+    border-left: 2px solid var(--border);
+}
+
+.step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--orange);
+    line-height: 1;
+}
+
+.step h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.step p {
+    font-size: 0.85rem;
+    color: #888;
+    line-height: 1.6;
+}
+
+/* stópka*/
+footer {
+    background: #0a0a0a;
+    color: #777;
+    padding: 40px 2rem 24px;
+}
+
+.footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+}
+
+.footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: #fff;
+    letter-spacing: 2px;
+    margin-bottom: 0.8rem;
+}
+
+    .footer-logo span {
+        color: var(--orange);
+    }
+
+footer p {
+    font-size: 0.83rem;
+    line-height: 1.7;
+}
+
+.footer-col h5 {
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.footer-col a {
+    display: block;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.83rem;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+}
+
+    .footer-col a:hover {
+        color: var(--orange);
+    }
+
+.footer-bottom {
+    max-width: 1100px;
+    margin: 2rem auto 0;
+    border-top: 1px solid #1a1a1a;
+    padding-top: 1.2rem;
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/*idk co to, według dokuemntacji, reposynsywnosć dla małych ekranów telefonów itp I guess muszę się dowiedzieć*/
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .hero::before {
+        display: none;
+    }
+
+    .stats-bar {
+        gap: 2rem;
+    }
 }
