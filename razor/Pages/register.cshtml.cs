@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace razor.Pages
 {
-    public class add_userModel : PageModel
+    public class registerModel : PageModel
     {
         [BindProperty]
         [Required(ErrorMessage = "Imię jest wymagane")]

@@ -1,7 +1,7 @@
 @page
-@model razor.Pages.add_userModel
+@model razor.Pages.registerModel
 @{
-    ViewData["Title"] = "Zaloguj się";
+    ViewData["Title"] = "Utwórz konto";
 }
 
 <!DOCTYPE html>
@@ -27,13 +27,30 @@
 
     <section class="hero" style="padding: 60px 2rem 50px;">
         <div style="max-width:1200px; margin:0 auto;">
-            <div class="hero-tag">Twoje konto</div>
-            <h1>Zaloguj się</h1>
+            <div class="hero-tag">Nowe konto</div>
+            <h1>Utwórz <span>konto</span></h1>
         </div>
     </section>
 
-    <div style="max-width: 480px; margin: 50px auto; padding: 0 1.5rem 0;">
+    <div style="max-width: 520px; margin: 50px auto; padding: 0 1.5rem 0;">
         <form method="post">
+            <div class="mb-3">
+                <label asp-for="Imie" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Imię</label>
+                <input asp-for="Imie" class="form-control" placeholder="np. Jan" />
+                <span asp-validation-for="Imie" class="text-danger" style="font-size:.8rem;"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DrugieImie" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Drugie imię <span style="color:#aaa; font-weight:400;">(opcjonalnie)</span></label>
+                <input asp-for="DrugieImie" class="form-control" placeholder="np. Marek" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Nazwisko" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Nazwisko</label>
+                <input asp-for="Nazwisko" class="form-control" placeholder="np. Kowalski" />
+                <span asp-validation-for="Nazwisko" class="text-danger" style="font-size:.8rem;"></span>
+            </div>
+
             <div class="mb-3">
                 <label asp-for="Email" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Adres e-mail</label>
                 <input asp-for="Email" class="form-control" type="email" placeholder="np. jan@example.com" />
@@ -42,17 +59,17 @@
 
             <div class="mb-4">
                 <label asp-for="Haslo" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Hasło</label>
-                <input asp-for="Haslo" class="form-control" type="password" placeholder="Twoje hasło" />
+                <input asp-for="Haslo" class="form-control" type="password" placeholder="Minimum 8 znaków" />
                 <span asp-validation-for="Haslo" class="text-danger" style="font-size:.8rem;"></span>
             </div>
 
             <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-                <button type="submit" class="btn-primary-custom">Zaloguj się</button>
+                <button type="submit" class="btn-primary-custom">Utwórz konto</button>
                 <a asp-page="/Index" class="btn-outline-custom" style="display:inline-block;">Anuluj</a>
             </div>
 
             <p style="margin-top:1.5rem; font-size:.85rem; color:#888;">
-                Nie masz konta? <a asp-page="/register" style="color:var(--orange); text-decoration:none;">Utwórz konto</a>
+                Masz już konto? <a asp-page="/add_user" style="color:var(--orange); text-decoration:none;">Zaloguj się</a>
             </p>
         </form>
     </div>
