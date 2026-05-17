@@ -8,7 +8,7 @@ using api.Extensions;
 namespace api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BidsController(IBidService service) : ControllerBase
     {
         private readonly IBidService _service = service;
