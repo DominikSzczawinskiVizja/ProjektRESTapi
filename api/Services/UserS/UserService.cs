@@ -1,24 +1,31 @@
 ﻿//Miejsce w którym program waliduje dane
-using api.Models;
 using api.DTOs.UserDto;
-using api.Repositories.UserRepo;
+using api.Models;
 using api.Repositories.AuctionRepo;
+using api.Repositories.UserRepo;
+
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Services.UserS
 {
-    public class UserService(IUserRepository repository, IAuctionRepository auction) : IUserService
+    public class UserService(
+        IUserRepository repository,
+        IAuctionRepository auction,
+        IPasswordHasher<User> passwordHasher
+        ) : IUserService
     {
         private readonly IUserRepository _repository = repository;
         private readonly IAuctionRepository _auction = auction;
+        private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }
-        public async Task<User?> GetByIdAsync(long id)
+        public async Task<User> GetByIdAsync(long id)
         {
-            var user = await _repository.GetByIdAsync(id);
-            return user ?? throw new KeyNotFoundException($"User with ID: {id} not found");
+            return await _repository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException($"User with ID: {id} not found");
         }
         public async Task<User> AddUserAsync(UserCreateDto dto)
         {   //dane wysylane przez klienta
@@ -27,28 +34,38 @@ namespace api.Services.UserS
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,
-                PasswordHash = dto.Password,
+                PasswordHash = "",
                 CreatedAt = DateTime.UtcNow
             };
 
+            newUser.PasswordHash = _passwordHasher.HashPassword(newUser, dto.Password);
+
             return await _repository.AddUserAsync(newUser);
         }
-        public async Task<User> UpdateUserAsync(long id, UserUpdateDto dto)
+        public async Task<User> UpdateUserAsync(long id, long currentUserId, UserUpdateDto dto)
         {
-            var user = await _repository.GetByIdAsync(id);
-            user!.FirstName = dto.FirstName ?? user.FirstName;
-            user!.LastName = dto.LastName ?? user.LastName;
-            user!.Email = dto.Email ?? user.Email;
+            if (id != currentUserId)
+                throw new UnauthorizedAccessException("You can only update your own account");
+
+            var user = await _repository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException($"User with ID: {id} not found");
+
+            user.FirstName = dto.FirstName ?? user.FirstName;
+            user.LastName = dto.LastName ?? user.LastName;
+            user.Email = dto.Email ?? user.Email;
 
             return await _repository.UpdateUserAsync(user);
         }
-        public async Task DeleteUserAsync(long id)
+        public async Task DeleteUserAsync(long id, long currentUserId)
         {
+            if (id != currentUserId)
+                throw new UnauthorizedAccessException("You can only delete your own account");
+
             var user = await GetByIdAsync(id);
-            if(user!.Auctions.Count != 0)
-            {
+
+            if (user.Auctions.Count != 0) 
                 throw new InvalidOperationException("Cannot delete Account when auction is ongoing");
-            }
+
             await _repository.DeleteUserAsync(id);
         }
     }

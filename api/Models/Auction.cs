@@ -1,4 +1,4 @@
-﻿//Struktura bazy danych każda klasa = tabelka w SQL
+﻿ //Struktura bazy danych każda klasa = tabelka w SQL
 namespace api.Models
 {
     public class Auction

@@ -7,7 +7,11 @@ using api.Repositories.AuctionRepo;
 
 namespace api.Services.BidS
 {
-        public class BidService(IBidRepository repository, IAuctionRepository auction, IHttpContextAccessor httpContextAccessor) : IBidService
+        public class BidService(
+            IBidRepository repository,
+            IAuctionRepository auction,
+            IHttpContextAccessor httpContextAccessor
+            ) : IBidService
         {
         private readonly IBidRepository _repository = repository;
         private readonly IAuctionRepository _auction = auction;
@@ -24,13 +28,9 @@ namespace api.Services.BidS
         }
         public async Task<Bid> AddBidAsync(long UserId, long AuctionId, BidCreateDto dto) //add
         {
-            var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier); //pobieranie id z tokena
-
-            if (userIdClaim == null)
-            {
-                throw new UnauthorizedAccessException("You must be logged in to place a bid.");
-            }
-            long currentUserId = long.Parse(userIdClaim.Value);
+            var userIdClaim = (_httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier))
+                ?? throw new UnauthorizedAccessException("You must be logged in to place a bid."); //pobieranie id z tokena
+            long ZcurrentUserId = long.Parse(userIdClaim.Value);
 
             var Auction = await _auction.GetByIdAsync(AuctionId);
 

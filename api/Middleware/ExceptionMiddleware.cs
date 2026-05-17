@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using api.Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace api.Middleware
 {
@@ -29,6 +30,11 @@ namespace api.Middleware
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+            }
+            catch (ForbiddenException ex)
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsJsonAsync(new { erorr = ex.Message });
             }
             catch (Exception)
             {
