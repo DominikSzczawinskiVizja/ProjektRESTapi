@@ -1,0 +1,107 @@
+@page "/oferta/{id:long}"
+@model razor.Pages.OfertaModel
+@{
+    ViewData["Title"] = "Szczegóły oferty";
+}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] – Alledrogo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a class="nav-logo" href="/">Alle<span>drogo</span></a>
+        </div>
+        <ul class="nav-links">
+            <li><a asp-page="/add_auction">Sprzedaj</a></li>
+            @if (!string.IsNullOrEmpty(Model.LoggedEmail))
+            {
+                <li><span style="color:#ccc; font-size:.82rem; font-weight:500; letter-spacing:.05em; text-transform:uppercase;">@Model.LoggedEmail</span></li>
+                <li><a asp-page="/Profil" class="nav-btn" style="background:#333;">Profil</a></li>
+                <li><a asp-page="/Logout" class="nav-btn" style="background:#333;">Wyloguj</a></li>
+            }
+            else
+            {
+                <li><a asp-page="/register">Utwórz konto</a></li>
+                <li><a asp-page="/add_user" class="nav-btn">Zaloguj</a></li>
+            }
+        </ul>
+    </nav>
+
+    <div style="max-width:700px; margin:60px auto; padding:0 1.5rem 80px;">
+        <h1 style="font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:1px; margin-bottom:2rem;">Szczegóły oferty</h1>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div style="background:#ff4444; color:#fff; padding:.8rem 1.2rem; border-radius:6px; margin-bottom:1.5rem; font-size:.88rem; font-weight:500;">
+                @Model.ErrorMessage
+            </div>
+        }
+        else if (Model.Oferta != null)
+        {
+            <div style="background:#fff; border:1px solid #e0e0e0; border-radius:10px; padding:2rem;">
+                <div style="display:grid; gap:1.2rem;">
+
+                    <div style="display:grid; grid-template-columns:160px 1fr; gap:.5rem; align-items:center; border-bottom:1px solid #f5f5f5; padding-bottom:1rem;">
+                        <span style="font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:#999;">Nr oferty</span>
+                        <span style="font-weight:600;">#@Model.Oferta.Id</span>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:160px 1fr; gap:.5rem; align-items:center; border-bottom:1px solid #f5f5f5; padding-bottom:1rem;">
+                        <span style="font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:#999;">Kwota</span>
+                        <span style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--orange);">@Model.Oferta.Amount.ToString("N0") zł</span>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:160px 1fr; gap:.5rem; align-items:center; border-bottom:1px solid #f5f5f5; padding-bottom:1rem;">
+                        <span style="font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:#999;">Aukcja</span>
+                        <a href="/aukcja/@Model.Oferta.AuctionId" style="color:var(--orange); text-decoration:none; font-weight:500;">@Model.Oferta.AuctionName</a>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:160px 1fr; gap:.5rem; align-items:center; border-bottom:1px solid #f5f5f5; padding-bottom:1rem;">
+                        <span style="font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:#999;">Licytujący</span>
+                        <span>@Model.Oferta.UserFirstName @Model.Oferta.UserMiddleName @Model.Oferta.UserLastName</span>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:160px 1fr; gap:.5rem; align-items:center;">
+                        <span style="font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:#999;">Data złożenia</span>
+                        <span style="color:#555;">@Model.Oferta.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="margin-top:2rem;">
+                <a href="/aukcja/@Model.Oferta.AuctionId" style="color:#999; font-size:.85rem; text-decoration:none;">← Wróć do aukcji</a>
+            </div>
+        }
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div class="footer-logo">Alle<span>drogo</span></div>
+                <p>Profesjonalne aukcje od 1996 roku. Kupuj i sprzedawaj z pewnością.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Pomoc</h5>
+                <a asp-page="/Regulamin">Regulamin</a>
+                <a asp-page="/Prywatnosc">Polityka prywatności</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© @DateTime.Now.Year Alledrogo. Wszelkie prawa zastrzeżone.</span>
+            <span>Warszawa, Polska</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

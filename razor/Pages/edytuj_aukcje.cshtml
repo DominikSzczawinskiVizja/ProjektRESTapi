@@ -1,7 +1,8 @@
-@page
-@model razor.Pages.add_auctionModel
+@page "/edytuj-aukcje/{id:long}"
+@model razor.Pages.edytuj_aukcjeModel
 @{
-    ViewData["Title"] = "Wystaw przedmiot";
+    ViewData["Title"] = "Edytuj aukcję";
+    var id = RouteData.Values["id"];
 }
 
 <!DOCTYPE html>
@@ -22,9 +23,10 @@
         </div>
         <ul class="nav-links">
             <li><a asp-page="/add_auction">Sprzedaj</a></li>
-            @if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserEmail")))
+            @if (!string.IsNullOrEmpty(Model.LoggedEmail))
             {
-                <li><span style="color:#ccc; font-size:.82rem; font-weight:500; letter-spacing:.05em; text-transform:uppercase;">@HttpContext.Session.GetString("UserEmail")</span></li>
+                <li><span style="color:#ccc; font-size:.82rem; font-weight:500; letter-spacing:.05em; text-transform:uppercase;">@Model.LoggedEmail</span></li>
+                <li><a asp-page="/Profil" class="nav-btn" style="background:#333;">Profil</a></li>
                 <li><a asp-page="/Logout" class="nav-btn" style="background:#333;">Wyloguj</a></li>
             }
             else
@@ -35,14 +37,8 @@
         </ul>
     </nav>
 
-    <section class="hero" style="padding: 60px 2rem 50px;">
-        <div style="max-width:1200px; margin:0 auto;">
-            <div class="hero-tag">Nowa aukcja</div>
-            <h1>Wystaw <span>przedmiot</span></h1>
-        </div>
-    </section>
-
-    <div style="max-width: 520px; margin: 50px auto; padding: 0 1.5rem 0;">
+    <div style="max-width:700px; margin:60px auto; padding:0 1.5rem 80px;">
+        <h1 style="font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:1px; margin-bottom:2rem;">Edytuj aukcję</h1>
 
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
@@ -50,24 +46,25 @@
                 @Model.ErrorMessage
             </div>
         }
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div style="background:#22c55e; color:#fff; padding:.8rem 1.2rem; border-radius:6px; margin-bottom:1.5rem; font-size:.88rem; font-weight:500;">
+                @Model.SuccessMessage
+            </div>
+        }
 
         <form method="post">
-            <div class="mb-3">
-                <label asp-for="Nazwa" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Nazwa przedmiotu</label>
-                <input asp-for="Nazwa" class="form-control" placeholder="np. Laptop Dell XPS 15" />
-                <span asp-validation-for="Nazwa" class="text-danger" style="font-size:.8rem;"></span>
+            <div class="mb-4">
+                <label class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Nazwa aukcji</label>
+                <input asp-for="Nazwa" class="form-control" />
             </div>
-
-            <div class="mb-3">
-                <label asp-for="Opis" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Opis</label>
-                <textarea asp-for="Opis" class="form-control" rows="3" placeholder="Opisz przedmiot..."></textarea>
-                <span asp-validation-for="Opis" class="text-danger" style="font-size:.8rem;"></span>
+            <div class="mb-4">
+                <label class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Opis</label>
+                <textarea asp-for="Opis" class="form-control" rows="4"></textarea>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="Kategoria" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Kategoria</label>
+            <div class="mb-4">
+                <label class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Kategoria</label>
                 <select asp-for="Kategoria" class="form-control">
-                    <option value="">— wybierz kategorię —</option>
                     <option value="Elektronika">Elektronika</option>
                     <option value="Komputery">Komputery</option>
                     <option value="Motoryzacja">Motoryzacja</option>
@@ -79,29 +76,27 @@
                     <option value="Moda">Moda</option>
                     <option value="Przemysł">Przemysł</option>
                 </select>
-                <span asp-validation-for="Kategoria" class="text-danger" style="font-size:.8rem;"></span>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="Cenawywoławcza" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Cena wywoławcza (zł)</label>
-                <input asp-for="Cenawywoławcza" class="form-control" type="number" min="1" step="1" placeholder="np. 500" />
-            </div>
-
             <div class="mb-4">
-                <label asp-for="Czasaukcji" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Czas trwania aukcji</label>
-                <select asp-for="Czasaukcji" class="form-control">
-                    <option value="12">12 godzin</option>
-                    <option value="24" selected>24 godziny</option>
-                    <option value="48">48 godzin</option>
-                    <option value="72">72 godziny</option>
-                </select>
+                <label class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em;">Cena wywoławcza (zł)</label>
+                <input asp-for="Cena" type="number" min="1" step="0.01" class="form-control" />
             </div>
 
-            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-                <button type="submit" class="btn-primary-custom">Wystaw aukcję</button>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+                <button type="submit" class="btn-primary-custom">Zapisz zmiany</button>
                 <a asp-page="/Index" class="btn-outline-custom" style="display:inline-block;">Anuluj</a>
             </div>
         </form>
+
+        <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid #eee;">
+            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:#cc2222; margin-bottom:.8rem;">Strefa niebezpieczna</h3>
+            <p style="font-size:.88rem; color:#888; margin-bottom:1rem;">Usunięcie aukcji jest nieodwracalne.</p>
+            <form method="post" asp-page-handler="Delete" onsubmit="return confirm('Czy na pewno chcesz usunąć tę aukcję?')">
+                <button type="submit" style="background:#cc2222; color:#fff; border:none; padding:.7rem 1.8rem; border-radius:4px; font-weight:600; font-size:.88rem; cursor:pointer;">
+                    Usuń aukcję
+                </button>
+            </form>
+        </div>
     </div>
 
     <footer>
