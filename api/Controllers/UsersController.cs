@@ -5,7 +5,6 @@ using api.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace api.Controllers
 {
     [ApiController]
@@ -17,9 +16,8 @@ namespace api.Controllers
 
 
         //Pobieranie użytkownika po ID
+        [Authorize]
         [HttpGet("{id:long}")]
-        [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
         public async Task<ActionResult<UserResponseDto>> GetUserById([FromRoute]long id)
         {
@@ -29,9 +27,8 @@ namespace api.Controllers
 
 
         //Dodanie Użytkownika
+        [Authorize]
         [HttpPost]
-        [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
         public async Task<ActionResult<UserResponseDto>> AddUser([FromBody] UserCreateDto dto)
         {
@@ -49,10 +46,6 @@ namespace api.Controllers
         //Aktualizacja Użytkownika
         [Authorize]
         [HttpPut("{id:long}")]
-        [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
         public async Task<ActionResult<UserResponseDto>> UpdateUser([FromRoute] long id, [FromBody] UserUpdateDto dto)
         {
             var currentUserId = User.GetUserId();
@@ -64,9 +57,6 @@ namespace api.Controllers
         //Usunięcie użytkownika
         [Authorize]
         [HttpDelete("{id:long}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
         public async Task<IActionResult> DeleteUser([FromRoute] long id)
         {
             var currentUserId = User.GetUserId();
@@ -78,7 +68,6 @@ namespace api.Controllers
         //lista użytkowników
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<UserResponseDto>), StatusCodes.Status200OK)]
 
         public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetAllUsers()
         {

@@ -17,7 +17,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 
+[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 
 var builder = WebApplication.CreateBuilder(args);
 

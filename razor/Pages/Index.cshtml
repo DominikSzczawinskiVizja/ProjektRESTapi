@@ -17,10 +17,20 @@
 <body>
    <!--pasek nawigacyjny na górze -->
     <nav>
-        <a class="nav-logo" href="#">Alle<span>drogo</span></a>
+        <div class="nav-left">
+            <a class="nav-logo" href="/">Alle<span>drogo</span></a>
+            <div class="nav-dropdown">
+                <a href="#" class="nav-dropdown-toggle">Kategorie <span class="nav-caret">▾</span></a>
+                <ul class="nav-dropdown-menu">
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <li><a href="#" class="dropdown-cat-link" data-category="@cat.Slug">@cat.Name</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
         <ul class="nav-links">
-            <li><a asp-page="/add_auction">Licytuj</a></li>
-            <li><a href="#">Sprzedaj</a></li>
+            <li><a asp-page="/add_auction">Sprzedaj</a></li>
             <li><a asp-page="/register">Utwórz konto</a></li>
             <li><a asp-page="/add_user" class="nav-btn">Zaloguj</a></li>
         </ul>
@@ -107,10 +117,9 @@
                 <p>Profesjonalne aukcje od 1996 roku. Kupuj i sprzedawaj z pewnością.</p>
             </div>
             <div class="footer-col">
-            <div class="footer-col">
                 <h5>Pomoc</h5>
-                <a href="#">Regulamin</a>
-                <a href="#">Polityka prywatności</a>
+                <a asp-page="/Regulamin">Regulamin</a>
+                <a asp-page="/Prywatnosc">Polityka prywatności</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -123,16 +132,52 @@
     <script>
         // przyciski filtrujące
         document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const category = this.dataset.category;
+                document.querySelectorAll('.auction-card').forEach(card => {
+                    card.style.display =
+                        (category === 'all' || card.dataset.category === category) ? 'block' : 'none';
+                });
+            });
+        });
 
-        const category = this.dataset.category;
-        document.querySelectorAll('.auction-card').forEach(card => {
-        card.style.display =
-        (category === 'all' || card.dataset.category === category) ? 'block' : 'none';
-        });
-        });
+        // dropdown kategorii w nav — klik otwiera/zamyka
+        const dropdownToggle = document.querySelector('.nav-dropdown-toggle');
+        const dropdownMenu = document.querySelector('.nav-dropdown-menu');
+        const caret = document.querySelector('.nav-caret');
+        if (dropdownToggle && dropdownMenu) {
+            dropdownToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                const isOpen = dropdownMenu.classList.toggle('open');
+                if (caret) caret.style.transform = isOpen ? 'rotate(180deg)' : '';
+            });
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.nav-dropdown')) {
+                    dropdownMenu.classList.remove('open');
+                    if (caret) caret.style.transform = '';
+                }
+            });
+        }
+
+        // kliknięcie kategorii w dropdownie → filtruje aukcje na stronie
+        document.querySelectorAll('.dropdown-cat-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                dropdownMenu.classList.remove('open');
+                const slug = this.dataset.category;
+                // aktywuj odpowiedni filter-btn
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.category === slug);
+                });
+                // filtruj karty
+                document.querySelectorAll('.auction-card').forEach(card => {
+                    card.style.display = card.dataset.category === slug ? 'block' : 'none';
+                });
+                // przewiń do sekcji aukcji
+                document.getElementById('auctions')?.scrollIntoView({ behavior: 'smooth' });
+            });
         });
     </script>
 
