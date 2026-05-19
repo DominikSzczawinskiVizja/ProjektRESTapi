@@ -25,7 +25,7 @@ namespace api.Services.AuthS
                 CreatedAt = DateTime.UtcNow,
                 Role = "User",
                 PasswordHash = "",
-                Address = "" // trzeba będzie przypisać w profilu.
+                Address = dto.Address
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
@@ -39,7 +39,7 @@ namespace api.Services.AuthS
                 AccessToken = token,
                 UserId = created.Id,
                 Email = dto.Email,
-                Role = created.Role,
+                Role = created.Role
             };
         }
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)

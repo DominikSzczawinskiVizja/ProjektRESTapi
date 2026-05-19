@@ -35,6 +35,9 @@ namespace razor.Pages
         [Required(ErrorMessage = "Hasło jest wymagane")]
         [MinLength(8, ErrorMessage = "Hasło musi mieć minimum 8 znaków")]
         public string? Haslo { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "Adres jest wymagany")]
+        public string? Adres { get; set; }
 
         public string? ErrorMessage { get; set; }
 
@@ -55,7 +58,8 @@ namespace razor.Pages
                     FirstName = Imie,
                     LastName = Nazwisko,
                     Email,
-                    Password = Haslo
+                    Password = Haslo,
+                    Address = Adres
                 };
 
                 var content = new StringContent(

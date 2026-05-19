@@ -13,6 +13,6 @@ namespace api.Models
         public DateTime CreatedAt { get; set; }
         public required string Email { get; set; }
         public string Role { get; set; } = "User";
-        public required string Address { get; set; } = "";
+        public required string Address { get; set; }
     }
 }

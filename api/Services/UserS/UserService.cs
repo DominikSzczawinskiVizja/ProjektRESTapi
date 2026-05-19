@@ -34,8 +34,9 @@ namespace api.Services.UserS
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,
+                Address = dto.Address,
                 PasswordHash = "",
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
             };
 
             newUser.PasswordHash = _passwordHasher.HashPassword(newUser, dto.Password);

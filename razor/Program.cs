@@ -1,10 +1,10 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
-
+var apiBaseUrl = builder.Configuration["Api:BaseUrl"];
 builder.Services.AddHttpClient("API", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5168/");
+    client.BaseAddress = new Uri(apiBaseUrl!);
 });
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

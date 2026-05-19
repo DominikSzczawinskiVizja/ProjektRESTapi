@@ -19,6 +19,7 @@ namespace api.DTOs.UserDto
         [Required]
         [EmailAddress]
         public required string Email { get; set; }
-
+        [Required]
+        public required string Address { get; set; }
     }
 }

@@ -72,6 +72,10 @@
                 <input asp-for="Haslo" class="form-control" type="password" placeholder="Minimum 8 znaków" />
                 <span asp-validation-for="Haslo" class="text-danger" style="font-size:.8rem;"></span>
             </div>
+            <div class="mb-4">
+                <label asp-for="Adres" class="form-label" style="font-size:.82rem; font-weight:600; text-transform:uppercase; letter-spacing: .08em;">Adres</label>
+                <input asp-for="Adres" class="form-control" placeholder="np. Warszawa Barszczańska 48" />
+            </div>
 
             <div style="display:flex; gap:1rem; flex-wrap:wrap;">
                 <button type="submit" class="btn-primary-custom">Utwórz konto</button>
