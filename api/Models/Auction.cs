@@ -1,4 +1,5 @@
-﻿ //Struktura bazy danych każda klasa = tabelka w SQL
+﻿//Struktura bazy danych każda klasa = tabelka w SQL
+using System.ComponentModel.DataAnnotations.Schema;
 namespace api.Models
 {
     public class Auction
@@ -24,6 +25,9 @@ namespace api.Models
         public long OwnerId { get; set; }
 
         public decimal CurrentPrice { get; set; }
+
+        [NotMapped]
+        public bool IsOngoing => DateTime.UtcNow < EndAt;
 
     }
 }

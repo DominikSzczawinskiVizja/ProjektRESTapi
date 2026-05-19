@@ -14,8 +14,7 @@ namespace api.Controllers
         private readonly IAuctionService _service = service;
 
         //pobieranie aukcji po id
-        [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("{id:long}")]
         public async Task<IActionResult> GetAuctionById (long id)
         {
             var auction = await _service.GetByIdAsync(id);
@@ -32,27 +31,35 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetAuctionById), new { id = auction.Id }, auction);
         }
 
-        [Authorize]
-        [HttpPut("{id}")]
+        [Authorize(Policy = "UserRoleStatus")]
+        [HttpPut("{id:long}")]
         public async Task<IActionResult> UpdateAuction([FromBody] AuctionUpdateDto dto, [FromRoute] long id)
         {
             var auction = await _service.UpdateAuctionAsync(id,dto);
             return Ok(auction);
         }
 
-        [Authorize]
-        [HttpDelete("{id}")]
+        [Authorize(Policy = "UserRoleStatus")]
+        [HttpDelete("{id:long}")]
         public async Task<IActionResult> DeleteAuction([FromRoute] long id)
         {
             await _service.DeleteAuctionAsync(id);
             return NoContent();
         }
+
+        [Authorize(Policy = "UserRoleStatus")]
+        [HttpGet("{id:long}/winner")]
+        public async Task<IActionResult> GetAuctionWinner([FromRoute] long id)
+        {
+            var result = await _service.GetWinnerAsync(id);
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllAuctions()
         {
             var auction = await _service.GetAllAsync();
             return Ok(auction);
         }
-
     }
 }

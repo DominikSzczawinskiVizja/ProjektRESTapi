@@ -10,5 +10,6 @@ namespace api.Repositories.BidRepo
         Task<Bid> AddBidAsync(Bid bid);
         Task<Bid> UpdateBidAsync(Bid bid);
         Task DeleteBidAsync(long id);
+        Task<Bid?> GetHighestBidAsync(long auctionId);
     }
 }

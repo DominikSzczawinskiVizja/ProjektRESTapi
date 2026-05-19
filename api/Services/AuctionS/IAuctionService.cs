@@ -10,5 +10,8 @@ namespace api.Services.AuctionS
         Task<Auction> AddAuctionAsync(AuctionCreateDto dto, long ownerId);
         Task<Auction> UpdateAuctionAsync(long id, AuctionUpdateDto dto);
         Task DeleteAuctionAsync(long id);
+        Task<Response<AuctionWinnerDto>> GetWinnerAsync(long id);
+
+        //Task<Auction> GetAuctionDetailsAsync(long id);
     }
 }

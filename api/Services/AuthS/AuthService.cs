@@ -24,7 +24,8 @@ namespace api.Services.AuthS
                 LastName = dto.LastName,
                 CreatedAt = DateTime.UtcNow,
                 Role = "User",
-                PasswordHash = ""
+                PasswordHash = "",
+                Address = "" // trzeba będzie przypisać w profilu.
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
@@ -43,11 +44,7 @@ namespace api.Services.AuthS
         }
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
         {
-            var user = await _users.GetByEmailAsync(dto.Email);
-            if(user == null)
-            {
-                throw new UnauthorizedAccessException("Invalid E-mail or Password.");
-            }
+            var user = await _users.GetByEmailAsync(dto.Email) ?? throw new UnauthorizedAccessException("Invalid E-mail or Password.");
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if(result == PasswordVerificationResult.Failed)
             {

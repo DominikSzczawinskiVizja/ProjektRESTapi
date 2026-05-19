@@ -13,6 +13,7 @@ namespace api.Controllers
     {
         private readonly IBidService _service = service;
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetBidById (long id)
         {
@@ -25,7 +26,13 @@ namespace api.Controllers
         {
 
             var bid = await _service.AddBidAsync(User.GetUserId(), AuctionId, dto);
-            return CreatedAtAction(nameof(GetBidById), new { id = bid.Id }, bid);
+            var safeResponse = new
+            {
+                amount = bid.Amount,
+                createdAt = bid.CreatedAt,
+                message = "Bid placed succesfully"
+            };
+            return Ok(safeResponse);
         }
     }
 }

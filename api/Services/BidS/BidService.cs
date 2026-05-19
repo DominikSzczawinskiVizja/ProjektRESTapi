@@ -13,67 +13,65 @@ namespace api.Services.BidS
             IHttpContextAccessor httpContextAccessor
             ) : IBidService
         {
-        private readonly IBidRepository _repository = repository;
-        private readonly IAuctionRepository _auction = auction;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+            private readonly IBidRepository _repository = repository;
+            private readonly IAuctionRepository _auction = auction;
+            private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        public async Task<IEnumerable<Bid>> GetAllAsync() //get all bids
-        {
-            return await _repository.GetAllAsync();
-        }
-        public async Task<Bid?> GetByIdAsync(long id) //getById
-        {
-            return await _repository.GetByIdAsync(id);
+            public async Task<IEnumerable<Bid>> GetAllAsync() { return await _repository.GetAllAsync(); } //get all bids
 
-        }
-        public async Task<Bid> AddBidAsync(long UserId, long AuctionId, BidCreateDto dto) //add
-        {
-            var userIdClaim = (_httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier))
-                ?? throw new UnauthorizedAccessException("You must be logged in to place a bid."); //pobieranie id z tokena
-            long ZcurrentUserId = long.Parse(userIdClaim.Value);
-
-            var Auction = await _auction.GetByIdAsync(AuctionId);
-
-            if (Auction!.EndAt < DateTime.UtcNow)
+            public async Task<Bid?> GetByIdAsync(long id) //getById
             {
-                throw new InvalidOperationException($"The Auction with ID: {AuctionId} has already ended.");
+                return await _repository.GetByIdAsync(id);
+
             }
 
-            if (dto.Amount <= Auction.CurrentPrice)
+            public async Task<Bid> AddBidAsync(long UserId, long AuctionId, BidCreateDto dto) //add
             {
-                throw new InvalidOperationException($"The bid amount must be higher than the current price of the auction. Current price: {Auction.CurrentPrice}");
-            }
+                var Auction = await _auction.GetByIdAsync(AuctionId);
 
-            var newBid = new Bid
-            {
-                Amount = dto.Amount,
-                AuctionId = AuctionId,
-                UserId = UserId,
-                CreatedAt = DateTime.UtcNow,
-            };
-            Auction.CurrentPrice = newBid.Amount;
-            await _auction.UpdateAuctionAsync(Auction);
-            return await _repository.AddBidAsync(newBid);
-        }
-        public async Task<Bid> UpdateBidAsync(long AuctionId, Bid bid) //update
-        {
-            var Auction = await _auction.GetByIdAsync(AuctionId);
-            if (Auction!.EndAt < DateTime.UtcNow)
-            {
-                throw new InvalidOperationException($"The Auction with ID: {AuctionId} has already ended.");
+                if (Auction!.EndAt < DateTime.UtcNow)
+                {
+                    throw new InvalidOperationException($"The Auction with ID: {AuctionId} has already ended.");
+                }
+
+                if (dto.Amount <= Auction.CurrentPrice)
+                {
+                    throw new InvalidOperationException($"The bid amount must be higher than the current price of the auction. Current price: {Auction.CurrentPrice}");
+                }
+
+                var newBid = new Bid
+                {
+                    Amount = dto.Amount,
+                    AuctionId = AuctionId,
+                    UserId = UserId,
+                    CreatedAt = DateTime.UtcNow,
+                };
+
+                Auction.CurrentPrice = newBid.Amount;
+                await _auction.UpdateAuctionAsync(Auction);
+
+                return await _repository.AddBidAsync(newBid);
             }
-            if (bid.Amount <= Auction.CurrentPrice)
+            public async Task<Bid> UpdateBidAsync(long AuctionId, Bid bid) //update
             {
-                throw new InvalidOperationException($"The bid amount must be higher than the current price of the auction. Current price: {Auction.CurrentPrice}");
+                var Auction = await _auction.GetByIdAsync(AuctionId);
+
+                if (Auction!.EndAt < DateTime.UtcNow)
+                {
+                    throw new InvalidOperationException($"The Auction with ID: {AuctionId} has already ended.");
+                }
+
+                if (bid.Amount <= Auction.CurrentPrice)
+                {
+                    throw new InvalidOperationException($"The bid amount must be higher than the current price of the auction. Current price: {Auction.CurrentPrice}");
+                }
+
+                Auction.CurrentPrice = bid.Amount;
+                await _auction.UpdateAuctionAsync(Auction);
+
+                return await _repository.UpdateBidAsync(bid);
             }
-            Auction.CurrentPrice = bid.Amount;
-            await _auction.UpdateAuctionAsync(Auction);
-            return await _repository.UpdateBidAsync(bid);
+            public async Task DeleteBidAsync(long id) { await _repository.DeleteBidAsync(id); } //delete
         }
-        public async Task DeleteBidAsync(long id) //delete
-            {
-                await _repository.DeleteBidAsync(id);
-            }
-        }
-    }
+}
 
