@@ -274,76 +274,67 @@ Style CSS	Bootstrap 5	Responsywny interfejs
 ## 3. Diagram ERD i klas
 Baza danych składa się z trzech tabel: Users, Auctions i Bids
 klas:
-┌──────────────────────────────┐
-│         User                 │
-├──────────────────────────────┤
-│ - Id: long                   │
-│ - FirstName: string          │
-│ - LastName: string           │
-│ - Email: string              │
-│ - PasswordHash: string       │
-├──────────────────────────────┤
-│ + GetFullName(): string      │
-│ + ValidateEmail(): bool      │
-└──────────────────────────────┘
-           ▲
-           │ Owns (1)
-           │
-┌──────────────────────────────┐
-│       Auction                │
-├──────────────────────────────┤
-│ - Id: long                   │
-│ - Name: string               │
-│ - CurrentPrice: decimal      │
-│ - EndAt: DateTime            │
-├──────────────────────────────┤
-│ + PlaceBid(): void           │
-│ + IsActive(): bool           │
-└──────────────────────────────┘
-           ▲
-           │ Has Many (1..*) 
-           │
-┌──────────────────────────────┐
-│        Bid                   │
-├──────────────────────────────┤
-│ - Id: long                   │
-│ - Amount: decimal            │
-│ - CreatedAt: DateTime        │
-├──────────────────────────────┤
-│ + Validate(): bool           │
-└──────────────────────────────┘
+```mermaid
+classDiagram
+    class User {
+        -long Id
+        -string FirstName
+        -string LastName
+        -string Email
+        -string PasswordHash
+        +GetFullName() string
+        +ValidateEmail() bool
+    }
+
+    class Auction {
+        -long Id
+        -string Name
+        -decimal CurrentPrice
+        -DateTime EndAt
+        +PlaceBid() void
+        +IsActive() bool
+    }
+
+    class Bid {
+        -long Id
+        -decimal Amount
+        -DateTime CreatedAt
+        +Validate() bool
+    }
+
+    User "1" --> "0..*" Auction : Owns
+    Auction "1" --> "1..*" Bid : Has Many
+```
 ERD:
-┌─────────────┐
-│    Users    │
-├─────────────┤
-│ Id (PK)     │
-│ FirstName   │
-│ Email       │───┐
-│ Password    │   │
-└─────────────┘   │
-      ▲           │
-      │ (1)       │ (*)
-      │           │
-      └───────────┘
-                  │
-            ┌─────────────┐
-            │  Auctions   │
-            ├─────────────┤
-            │ Id (PK)     │
-            │ Name        │
-            │ OwnerId(FK)─┘
-            └─────────────┘
-                  │
-                  │ (1)
-                  │ (*)
-                  │
-            ┌─────────────┐
-            │    Bids     │
-            ├─────────────┤
-            │ Id (PK)     │
-            │ Amount      │
-            │ AuctionId(FK)
-            └─────────────┘
+```mermaid
+erDiagram
+    Users {
+        long Id PK
+        string FirstName
+        string LastName
+        string Email
+        string PasswordHash
+    }
+
+    Auctions {
+        long Id PK
+        string Name
+        decimal CurrentPrice
+        datetime EndAt
+        long OwnerId FK
+    }
+
+    Bids {
+        long Id PK
+        decimal Amount
+        datetime CreatedAt
+        long AuctionId FK
+    }
+
+    Users ||--o{ Auctions : "owns"
+    Auctions ||--|{ Bids : "has"
+```
+
 ### 3.1 Tabela Users
 Kolumna	Typ	Opis
 Id	BIGINT (PK)	Klucz główny, autoinkrementacja
